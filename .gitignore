@@ -1,4 +1,5 @@
 packer
 vagrant
+.vagrant/
 debian12.box
-/.vagrant
+packer_cache/
