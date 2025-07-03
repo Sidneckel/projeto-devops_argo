@@ -98,3 +98,43 @@
         kind create cluster
         --config /home/vagrant/kind/cluster-config.yaml
         --name dev-cluster
+
+    # ----------------------
+    # Instalar Argo CD
+    # ----------------------
+    - name: Criar namespace argocd (se não existir)
+      become_user: vagrant
+      command: kubectl create namespace argocd
+      ignore_errors: true
+      environment:
+        KUBECONFIG: /home/vagrant/.kube/config
+        
+    - name: Aplicar manifest do Argo CD
+      become_user: vagrant
+      command: >
+        kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+      args:
+        creates: /home/vagrant/.argo_installed
+      environment:
+        KUBECONFIG: /home/vagrant/.kube/config
+
+    - name: Esperar todos os pods do Argo CD estarem prontos
+      become_user: vagrant
+      shell: |
+        kubectl wait --for=condition=available --timeout=180s deployment --all -n argocd
+      environment:
+        KUBECONFIG: /home/vagrant/.kube/config
+
+    - name: Obter senha do usuário admin do Argo CD
+      become_user: vagrant
+      shell: |
+        kubectl get secret argocd-initial-admin-secret -n argocd \
+        -o jsonpath="{.data.password}" | base64 --decode
+      register: argo_admin_password
+      changed_when: false
+      environment:
+        KUBECONFIG: /home/vagrant/.kube/config
+
+    - name: Exibir a senha do Argo CD
+      debug:
+        msg: "Senha admin do Argo CD: {{ argo_admin_password.stdout }}"

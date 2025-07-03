@@ -2,7 +2,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "debian12"
 
   # Rede pública com bridge (interface física)
-  config.vm.network "public_network", bridge: "eno1"
+  config.vm.network "public_network", bridge: "enp2s0"
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "2048"
