@@ -1,0 +1,26 @@
+---
+- name: Criar namespace do Argo CD (se não existir)
+  command: kubectl create namespace argocd
+  ignore_errors: true
+  environment:
+    KUBECONFIG: /home/vagrant/.kube/config
+
+- name: Instalar o Argo CD via manifest oficial
+  command: kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+  environment:
+    KUBECONFIG: /home/vagrant/.kube/config
+
+- name: Criar namespace da aplicação (todo-app)
+  command: kubectl create namespace todo-app
+  ignore_errors: true
+  environment:
+    KUBECONFIG: /home/vagrant/.kube/config
+
+- name: Aplicar aplicação backend no ArgoCD
+  become_user: vagrant
+  command: kubectl apply -f "{{ playbook_dir }}/roles/argocd/files/backend-app.yaml" -n argocd
+
+- name: Aplicar aplicação frontend no ArgoCD
+  become_user: vagrant
+  command: kubectl apply -f "{{ playbook_dir }}/roles/argocd/files/frontend-app.yaml" -n argocd
+

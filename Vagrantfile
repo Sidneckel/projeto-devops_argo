@@ -1,5 +1,6 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "debian12"
+    config.vm.box_url = "file://#{Dir.pwd}/debian12.box" # força caminho da vm
 
   # Rede pública com bridge (interface física)
   config.vm.network "public_network", bridge: "enp2s0"
@@ -29,3 +30,6 @@ Vagrant.configure("2") do |config|
     ansible-playbook /vagrant/ansible/setup_kubernetes.yml -i localhost,
   SHELL
 end
+
+
+#

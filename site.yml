@@ -1,0 +1,8 @@
+---
+- name: Provisionar cluster Kubernetes com Argo CD e aplicações
+  hosts: localhost
+  connection: local
+  become: true
+
+  roles:
+    - argocd
