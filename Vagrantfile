@@ -1,6 +1,9 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "debian12"
     config.vm.box_url = "file://#{Dir.pwd}/debian12.box" # força caminho da vm
+  # Port forwarding para expor as portas 30001 e 30002 do guest para host
+  config.vm.network "forwarded_port", guest: 30001, host: 30001
+  config.vm.network "forwarded_port", guest: 30002, host: 30002
 
   # Rede pública com bridge (interface física)
   config.vm.network "public_network", bridge: "enp2s0"
