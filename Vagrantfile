@@ -35,4 +35,12 @@ Vagrant.configure("2") do |config|
 end
 
 
-#
+#kubectl port-forward -n todo-app svc/backend-service 30001:3333
+#kubectl port-forward -n todo-app svc/frontend-service 30002:4444
+#kubectl port-forward svc/argocd-server -n argocd --address 0.0.0.0 8080:443
+#kubectl get pods -n todo-app
+#sudo kubectl get svc
+#scp -r ~/Documentos/projeto-devops_argo vagrant@191.52.55.180:/home/vagrant/
+#cd projeto-devops_argo
+#ansible-playbook -i hosts site.yml --become
+
